@@ -16,7 +16,9 @@ struct ImageLoaderModel {
     var url: URL
     var userData: Any? = nil
     var image: UIImage? = nil
+    var downloadCompleted: (_ image: UIImage?, _ url: URL, _ userData: Any?) -> Void
 }
+
 //定義快取
 struct ImageCacheModel {
     var key: String
@@ -25,15 +27,7 @@ struct ImageCacheModel {
 }
 
 class ImageLoader: NSObject {
-    var db: SQLiteConnect? = nil
-    
-    let sqliteURL: URL = {
-        do {
-            return try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("cachedb.sqlite")
-        } catch {
-            fatalError("Error getting file URL from document directory.")
-        }
-    }()
+    let load = SQLiteConnect.shared
     
     static let shared = ImageLoader()
     static var maxWidth: CGFloat? = nil
@@ -43,7 +37,6 @@ class ImageLoader: NSObject {
     var queueLists =    [ImageLoaderModel]()
     var cacheLists =    [ImageCacheModel]()
    
-    
     let dbQueue = DispatchQueue(label: "db")
     func loadImage(url: URL,
                    userData: Any? = nil,
@@ -51,38 +44,28 @@ class ImageLoader: NSObject {
         //cacheList有圖所以直接取快取裡的圖片，最多8張，超過8張丟棄最久沒讀的那張
         dbQueue.async {
             let reqKey = url.absoluteString.md5
-            
-            /*
-            if !self.cacheLists.isEmpty {
-                for data in self.cacheLists {
-                    if data.key == reqKey {
-                        //data.imageData是Data，轉成UIImage
-                        if let image = UIImage(data: data.imageData) {
-                            completed(image, url, userData)
-                            return
-                        }
-                    }
-                }
-            }
-            */
-            
+       
             //檢查是否有記憶體快取
             if let img = self.checkMemoryCache(key: reqKey){
                 completed(img, url, userData)
+                self.checkNextDownload()
                 return
             }
             
-            
             //檢查有沒有資料庫快取
-            self.loadImageFromDb(reqKey, url) { [weak self] (image, url, userData) in
+            self.loadImageFromDb(reqKey, url) { [weak self] (image, imageUrl, userData) in
                 guard let self = self else { return }
+                if imageUrl != url { print("-----------xxxxxxx---------------------") }
                 if let image = image {
                     completed(image, url, userData)
+                    self.checkNextDownload()
                 } else {
                     //沒有資料庫快取， 進行網路下載
                     self.downloadImage(url, completed)
                 }
             }
+            
+//            self.downloadImage(url, completed)
         }
     }
     
@@ -101,17 +84,15 @@ class ImageLoader: NSObject {
     }
     
     func loadImageFromDb(_ reqKey: String, _ url: URL,userData: Any? = nil, _ completed: @escaping (_ image: UIImage?, _ url: URL, _ userData: Any?) -> Void) {
-        let sqlitePath = sqliteURL.path
-        db = SQLiteConnect(path: sqlitePath)
-        
+
         //快取沒有圖就從資料庫裡抓 資料庫沒有再下載
-        if let mydb = db {
+        if let mydb = load {
             
             //create
-            let _ = mydb.createTable("cache", columnsInfo: [
-                                        "key text primary key",
-                                        "image blob",
-                                        "usedTime integer"])
+//            let _ = mydb.createTable("cache", columnsInfo: [
+//                                        "key text primary key",
+//                                        "image blob",
+//                                        "usedTime integer"])
             
             //load
             let statement = mydb.fetch("cache", cond: "1 == 1", order: nil)
@@ -141,19 +122,33 @@ class ImageLoader: NSObject {
         completed(nil, url, userData)
     }
     
-    func downloadImage(_ url: URL,userData: Any? = nil, _ completed: @escaping (_ image: UIImage?, _ url: URL, _ userData: Any?) -> Void) {
+    func downloadImage(_ url: URL, userData: Any? = nil, _ completed: @escaping (_ image: UIImage?, _ url: URL, _ userData: Any?) -> Void) {
         //將url和userData包裝成 imageLoaderModel物件
-        //downloadImage的count小於4會把url加到downloadImage
-        //如果大於等於4就會將url存到queueImage
-        let downloadData = ImageLoaderModel(url: url, userData: userData)
+        //downloadImage的count小於2會把url加到downloadImage
+        //如果大於等於2就會將url存到queueImage
+        let downloadData = ImageLoaderModel(url: url, userData: userData, downloadCompleted: completed)
         //檢查下載執行緒是否超過限制
+        
         if downloadLists.count < maxDownloadNumber {
+            print("333 downloadLists.count=\(downloadLists.count)")
             downloadLists.append(downloadData)
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                let response = response as! HTTPURLResponse
+                let status = response.statusCode
+                if error != nil || status != 200 {
+                    print("=====ERROR=\(String(describing: error))")
+                    print("-- 下載失敗, 失敗網址: \(String(describing: response.url)) ")
+                    completed(nil, url, userData)
+                    return
+                }
+                
+                print("-- 下載完成, 下載網址: \(String(describing: response.url)) ")
                 self.completedImage(downloadData,data, response, completed)
+
             }
             task.resume()
         } else {
+            print("444 downloadLists.count=\(downloadLists.count)")
             queueLists.append(downloadData)
         }
     }
@@ -178,13 +173,25 @@ class ImageLoader: NSObject {
             
             //回傳圖片
             completed(image, imageData.url, imageData.userData)
-
+            
+            print("111 downloadLists.count=\(downloadLists.count)")
             //下載完了就移除已經下載好的url
-            self.downloadLists.removeAll { (imageData) -> Bool in
-                return imageData.url == response?.url
+            for (index, imageData) in self.downloadLists.enumerated(){
+                if imageData.url == response?.url {
+                    self.downloadLists.remove(at: index)
+                    break
+                }
             }
-
-            checkNextDownload(completed)
+            print("222 downloadLists.count=\(downloadLists.count)")
+            
+//            self.downloadLists.removeAll { (imageData) -> Bool in
+//                return imageData.url == response?.url
+//            }
+            
+            checkNextDownload()
+        } else {
+            print("-- 下載回來的資料無法轉成 UIImage ")
+            completed(nil, imageData.url, imageData.userData)
         }
     }
     
@@ -196,10 +203,10 @@ class ImageLoader: NSObject {
     }
     
     func saveImageToDb(_ key: String, _ image: Data, _ usedTime: Int) {
-        let sqlitePath = sqliteURL.path
-        db = SQLiteConnect(path: sqlitePath)
-//        print(sqlitePath)
-        if let mydb = db {
+//        let sqlitePath = sqliteURL.path
+//        db = SQLiteConnect(path: sqlitePath)
+        
+        if let mydb = load {
             
             let _ = mydb.insert("cache",
                                 rowInfo: ["key":"'\(key)'", "usedTime":"\(usedTime)"], image)
@@ -223,19 +230,26 @@ class ImageLoader: NSObject {
         }
     }
     
-    func checkNextDownload(_ completed: @escaping (_ image: UIImage?, _ url: URL, _ userData: Any?) -> Void) {
+    func checkNextDownload() {
         //檢查是否還有未下載的網址
         //如果queueImage沒有值就中止 代表全都下載完了
+        print("正下載數量: self.downloadLists.count=\(self.downloadLists.count)")
+        print("剩餘未下載數量: self.queueLists.count=\(self.queueLists.count)")
         if !self.queueLists.isEmpty {
             //有未下載的，將它移出queue，並呼叫loadImage下載它
+            print("還有未下載的")
             if let qimg = self.queueLists.first {
                 //移除queue第一個網址
                 self.queueLists.removeFirst()
                 //呼叫loadImage去下載第一個網址
-                self.loadImage(url: qimg.url, userData: qimg.userData, completed: completed)
+                print("下載下一個 qimg=\(qimg)")
+                self.loadImage(url: qimg.url, userData: qimg.userData, completed: qimg.downloadCompleted)
+            } else {
+                print("qimg is nil")
             }
             
         } else {
+            print("queueLists is Empty")
             return
         }
     }

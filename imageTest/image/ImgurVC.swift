@@ -12,7 +12,7 @@ import SQLite3
 private let reuseIdentifier = "dataCell"
 private let reuseImage = "imagelarge"
 
-class ImgurVC: UIViewController,UITableViewDelegate,UITableViewDataSource, ClickTableViewCellDelegate {
+class ImgurVC: UIViewController, ClickTableViewCellDelegate {
  
     
     @IBOutlet weak var tableView: UITableView!
@@ -35,55 +35,51 @@ class ImgurVC: UIViewController,UITableViewDelegate,UITableViewDataSource, Click
         {"name":"pic12","url": "https://i.imgur.com/brrqBQs.jpg"},
         {"name":"pic13","url": "https://i.imgur.com/hZQ09sg.jpg"},
         {"name":"pic14","url": "https://i.imgur.com/zq4Camx.jpg"},
-        {"name":"pic15","url": "https://i.imgur.com/sjVoNAS.jpg"}
+        {"name":"pic15","url": "https://i.imgur.com/sjVoNAS.jpg"},
+
+        {"name":"pic1", "url": "https://i.imgur.com/0qbV0eF.jpg"},
+        {"name":"pic2", "url": "https://i.imgur.com/s9SawhH.jpg"},
+        {"name":"pic3", "url": "https://i.imgur.com/grhf3K2.jpg"},
+        {"name":"pic4", "url": "https://i.imgur.com/Zz28mtL.jpg"},
+        {"name":"pic5", "url": "https://i.imgur.com/fXH6QHf.jpg"},
+        {"name":"pic6", "url": "https://i.imgur.com/uNhh96M.jpg"},
+        {"name":"pic7", "url": "https://i.imgur.com/4Ps2dVm.jpg"},
+        {"name":"pic8", "url": "https://i.imgur.com/aVW7062.jpg"},
+        {"name":"pic9", "url": "https://i.imgur.com/9b6zpba.jpg"},
+        {"name":"pic10","url": "https://i.imgur.com/zzv0qOp.jpg"},
+        {"name":"pic11","url": "https://i.imgur.com/syTr0VP.jpg"},
+        {"name":"pic12","url": "https://i.imgur.com/gld5mkP.jpg"},
+        {"name":"pic13","url": "https://i.imgur.com/ava0OHv.jpg"},
+        {"name":"pic14","url": "https://i.imgur.com/GbqXo0v.jpg"},
+        {"name":"pic15","url": "https://i.imgur.com/kGTwUfe.jpg"}
         ]
     }
     """
+    
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = UIScreen.main.bounds.width * 3 / 4
+        print("self.tableView.estimatedRowHeight=\(self.tableView.estimatedRowHeight)")
         
-        tableView.dataSource = self
         ImageLoader.maxWidth = self.view.frame.width * UIScreen.main.scale
 
         if let jsonData = picJsonStr.data(using: .utf8) {
             if let photoData = try? JSONDecoder().decode(PicModel.self, from: jsonData) {
                 
                 self.pics = photoData.pics
-                
+                self.tableView.reloadData()
             }
         }
     }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return pics?.count ?? 0
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ImgurTVCell
-        
-        let pic = pics![indexPath.row]
-        cell.data = PicItemModel(name: pic.name, url: pic.url)
-        
-        cell.delegate = self
-        return cell
-    }
-    
+
     func clickTableViewCellDidTap(_ sender: ImgurTVCell, data: UIImage) {
+        print("clickTableViewCellDidTap data=\(data)")
         let imageLargeVC = self.storyboard?.instantiateViewController(identifier: reuseImage) as! ImageEnlargeVC
          
         imageLargeVC.largeImage = data
-        
-//        imageLargeVC.modalPresentationStyle = .fullScreen
-//        present(imageLargeVC, animated: true, completion: nil)
-        
-        
         self.navigationController?.pushViewController(imageLargeVC, animated: true)
         
     }
@@ -114,4 +110,30 @@ class ImgurVC: UIViewController,UITableViewDelegate,UITableViewDataSource, Click
     
 }
 
+extension ImgurVC: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return pics?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! ImgurTVCell
+        
+        let pic = pics![indexPath.row]
+        cell.data = PicItemModel(name: pic.name, url: pic.url)
+        cell.delegate = self
+        print(" cellForRowAt indexPath:\(indexPath) cell.data=\(String(describing: cell.data))")
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+}
 

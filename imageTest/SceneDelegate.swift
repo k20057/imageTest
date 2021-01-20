@@ -6,11 +6,11 @@
 //
 
 import UIKit
+import SQLite3
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -42,6 +42,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
+//        var db: SQLiteConnect? = nil
+//        let sqliteURL: URL = {
+//            do {
+//                return try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("cachedb.sqlite")
+//            } catch {
+//                fatalError("Error getting file URL from document directory.")
+//            }
+//        }()
+//        let sqlitePath = sqliteURL.path
+//        db = SQLiteConnect(path: sqlitePath)
+        print("aaa")
+        let load = SQLiteConnect.shared
+        if let mydb =  load {
+            mydb.closeDatabase()
+        }
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.

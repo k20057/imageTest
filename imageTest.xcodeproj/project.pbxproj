@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A7853BF625B468FD00D253DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853BF525B468FD00D253DC /* AppDelegate.swift */; };
-		A7853BF825B468FD00D253DC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853BF725B468FD00D253DC /* SceneDelegate.swift */; };
 		A7853BFF25B4690300D253DC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7853BFE25B4690300D253DC /* Assets.xcassets */; };
 		A7853C0225B4690300D253DC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7853C0025B4690300D253DC /* LaunchScreen.storyboard */; };
-		A7853C1225B4694C00D253DC /* SqLiteConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853C0B25B4694B00D253DC /* SqLiteConnect.swift */; };
 		A7853C1325B4694C00D253DC /* Md5.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853C0C25B4694B00D253DC /* Md5.swift */; };
 		A7853C1425B4694C00D253DC /* ExtImage+thumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853C0D25B4694B00D253DC /* ExtImage+thumb.swift */; };
 		A7853C1525B4694C00D253DC /* ImageEnlargeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853C0E25B4694B00D253DC /* ImageEnlargeVC.swift */; };
@@ -19,16 +17,16 @@
 		A7853C1725B4694C00D253DC /* ImgurTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853C1025B4694C00D253DC /* ImgurTVCell.swift */; };
 		A7853C1825B4694C00D253DC /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7853C1125B4694C00D253DC /* ImageLoader.swift */; };
 		A7853C1B25B4698100D253DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7853C1A25B4698000D253DC /* Main.storyboard */; };
+		A79228AB25B83A3E0028929C /* SqLiteConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79228AA25B83A3E0028929C /* SqLiteConnect.swift */; };
+		A7963C4025B5AE5E00141FEC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7963C3F25B5AE5E00141FEC /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A7853BF225B468FD00D253DC /* imageTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imageTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7853BF525B468FD00D253DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A7853BF725B468FD00D253DC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A7853BFE25B4690300D253DC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A7853C0125B4690300D253DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A7853C0325B4690300D253DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A7853C0B25B4694B00D253DC /* SqLiteConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqLiteConnect.swift; sourceTree = "<group>"; };
 		A7853C0C25B4694B00D253DC /* Md5.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Md5.swift; sourceTree = "<group>"; };
 		A7853C0D25B4694B00D253DC /* ExtImage+thumb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ExtImage+thumb.swift"; sourceTree = "<group>"; };
 		A7853C0E25B4694B00D253DC /* ImageEnlargeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageEnlargeVC.swift; sourceTree = "<group>"; };
@@ -36,6 +34,8 @@
 		A7853C1025B4694C00D253DC /* ImgurTVCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgurTVCell.swift; sourceTree = "<group>"; };
 		A7853C1125B4694C00D253DC /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		A7853C1A25B4698000D253DC /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		A79228AA25B83A3E0028929C /* SqLiteConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SqLiteConnect.swift; sourceTree = "<group>"; };
+		A7963C3F25B5AE5E00141FEC /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,9 +70,9 @@
 			children = (
 				A7853C1F25B46B3600D253DC /* utils */,
 				A7853C1E25B46B2200D253DC /* sqlite */,
-				A7853BF525B468FD00D253DC /* AppDelegate.swift */,
 				A7853C2025B46BA200D253DC /* image */,
-				A7853BF725B468FD00D253DC /* SceneDelegate.swift */,
+				A7853BF525B468FD00D253DC /* AppDelegate.swift */,
+				A7963C3F25B5AE5E00141FEC /* SceneDelegate.swift */,
 				A7853C1A25B4698000D253DC /* Main.storyboard */,
 				A7853BFE25B4690300D253DC /* Assets.xcassets */,
 				A7853C0025B4690300D253DC /* LaunchScreen.storyboard */,
@@ -84,7 +84,7 @@
 		A7853C1E25B46B2200D253DC /* sqlite */ = {
 			isa = PBXGroup;
 			children = (
-				A7853C0B25B4694B00D253DC /* SqLiteConnect.swift */,
+				A79228AA25B83A3E0028929C /* SqLiteConnect.swift */,
 			);
 			path = sqlite;
 			sourceTree = "<group>";
@@ -179,14 +179,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A79228AB25B83A3E0028929C /* SqLiteConnect.swift in Sources */,
 				A7853C1325B4694C00D253DC /* Md5.swift in Sources */,
 				A7853C1825B4694C00D253DC /* ImageLoader.swift in Sources */,
+				A7963C4025B5AE5E00141FEC /* SceneDelegate.swift in Sources */,
 				A7853C1425B4694C00D253DC /* ExtImage+thumb.swift in Sources */,
 				A7853C1725B4694C00D253DC /* ImgurTVCell.swift in Sources */,
 				A7853BF625B468FD00D253DC /* AppDelegate.swift in Sources */,
-				A7853C1225B4694C00D253DC /* SqLiteConnect.swift in Sources */,
 				A7853C1625B4694C00D253DC /* ImgurVC.swift in Sources */,
-				A7853BF825B468FD00D253DC /* SceneDelegate.swift in Sources */,
 				A7853C1525B4694C00D253DC /* ImageEnlargeVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

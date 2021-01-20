@@ -32,13 +32,15 @@ class ImgurTVCell: UITableViewCell {
     var data: PicItemModel? = nil {
         didSet {
             loading.startAnimating()
-            labImgur.text = data?.name
             if let urlStr = data?.url, let url = URL(string: urlStr) {
+                labImgur.text = data?.name
                 imgImgur.image = nil    //下載前先清空目前顯示的圖
                 imageUrl = url
                 let load = ImageLoader.shared
-//                print("要下載的圖片網址: \(url)")
+                print("要下載的圖片網址: \(url)  self=\(self)")
                 load.loadImage(url: url) { (image, imageUrl, userData) in
+                    print("下載完成 圖片網址: imageUrl=\(imageUrl) self.imageUrl=\(self.imageUrl) url=\(url) self=\(self)")
+
                     //檢查讀到的圖跟目前cell有沒有同一個
                     if imageUrl == self.imageUrl {
                         print("下載回來的網址與要顯示的網址一樣")
@@ -48,7 +50,7 @@ class ImgurTVCell: UITableViewCell {
                         }
                         
                     } else {
-                        print("----下載回來的網址與要顯示的網址不相符")
+                        print("----下載回來的網址與要顯示的網址不相符 imageUrl=\(imageUrl) self.imageUrl=\(String(describing: self.imageUrl)) self=\(self)")
                     }
                 }
             }
@@ -56,6 +58,7 @@ class ImgurTVCell: UITableViewCell {
     }
     
     @IBAction func clickButton(_ sender: Any) {
+        print("clickButton")
         if let image = self.imgImgur.image {
             delegate?.clickTableViewCellDidTap(self, data: image)
         }
