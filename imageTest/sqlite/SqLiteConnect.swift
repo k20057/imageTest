@@ -20,6 +20,7 @@ class SQLiteConnect {
             db = openDatabase(sqlitePath)
             print("ccc")
             if db == nil {
+                print("eee")
                 return nil
             }
             
@@ -42,7 +43,7 @@ class SQLiteConnect {
             return db
         }
         sqlite3_shutdown()
-        sqlite3_initialize();
+        sqlite3_initialize()
         if sqlite3_open_v2(path, &connectdb, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, nil) == SQLITE_OK {
             print("Successfully opened database \(path)")
             return connectdb!
@@ -55,6 +56,7 @@ class SQLiteConnect {
     func closeDatabase() {
         if db != nil {
             SQLiteConnect.dbQueue.sync {
+                print("wwww")
                 sqlite3_close(db!)
                 db = nil
             }

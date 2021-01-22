@@ -52,7 +52,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        }()
 //        let sqlitePath = sqliteURL.path
 //        db = SQLiteConnect(path: sqlitePath)
-        print("aaa")
         let load = SQLiteConnect.shared
         if let mydb =  load {
             mydb.closeDatabase()

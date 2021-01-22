@@ -241,9 +241,9 @@ class ImageLoader: NSObject {
             if let qimg = self.queueLists.first {
                 //移除queue第一個網址
                 self.queueLists.removeFirst()
-                //呼叫loadImage去下載第一個網址
+                //直接去下載，再去loadImage又會檢查資料庫浪費許多時間
                 print("下載下一個 qimg=\(qimg)")
-                self.loadImage(url: qimg.url, userData: qimg.userData, completed: qimg.downloadCompleted)
+                self.downloadImage(qimg.url, userData: qimg.userData, qimg.downloadCompleted)
             } else {
                 print("qimg is nil")
             }
