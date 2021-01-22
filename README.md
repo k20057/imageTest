@@ -22,11 +22,17 @@
 原本下載圖片是一次全部下載，非常慢又沒效率，在滑動UI時會非常卡頓，所以限制最多下載數量，超過會存在未下載，等正在下載完成後移除url，才會將未下載的url加到正在下載，並且移除未下載的url，直到兩個都為0。
 #### 3 記憶體快取與資料庫快取，縮小圖片
 先將圖片存在記憶體快取，但之後重新執行時還是會下載，原因是忘了寫return，如果找到圖就return，資料庫快取也是找到圖就return。
+在存到快取時會將url轉成md5當成key，之後讀取圖片會依照key來
 存到資料庫快取的圖會先經過壓縮再儲存，之後讀取圖片顯示時會快許多，減少滑動UI卡頓的情形。
+
 #### 4 用delegate傳圖到下一頁，scrollview放大圖片，刪除快取與分享圖片。
 使用delegate將圖從cell傳到controller，方法是在cell放一個透明的button，之後再把圖傳到下一級的controller。
 在controller右上角新增一個刪除button，能夠清空快取資料。
 下一級的controller使用scrollview放大圖片，在右上角新增分享button。
 #### 5 多執行緒與資料庫執行緒
 讓快取與下載圖片都在privite執行緒執行，並且設定資料庫執行緒會serial執行，如果不設會有死鎖問題。
-#### 6 checkNextDownload
+#### 6 重構、修改邏輯、checkNextDownload
+增加註釋與讓程式更易讀，還有原本有些邏輯錯了，所以跑了許多不必要的步驟。
+在記憶體快取與資料庫快取執行完之後加checkNextDownload，checkNextDownload是未下載url的function，目的是檢查還有沒有沒下載的url，因為讀到快取就不會跑到正在下載的function。
+## 結論
+花了一個月的時間，完成這個練習，學了許多技巧，了解cell的重用機制問題，快取，SQlite，物件獨立性，多執行緒，壓縮圖片，md5，程式重構，scrollView，分享。
