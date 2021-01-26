@@ -38,7 +38,8 @@ class ImgurTVCell: UITableViewCell {
                 imageUrl = url
                 let load = ImageLoader.shared
                 print("要下載的圖片網址: \(url)  self=\(self)")
-                load.loadImage(url: url) { (image, imageUrl, userData) in
+                load.loadImage(url: url) { [weak self](image, imageUrl, userData) in
+                    guard let self = self else { return }
                     print("下載完成 圖片網址: imageUrl=\(imageUrl) self.imageUrl=\(self.imageUrl) url=\(url) self=\(self)")
 
                     //檢查讀到的圖跟目前cell有沒有同一個
