@@ -55,13 +55,11 @@ class ImgurVC: UIViewController, ClickTableViewCellDelegate {
     }
     """
     
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.tableView.estimatedRowHeight = UIScreen.main.bounds.width * 3 / 4
-        print("self.tableView.estimatedRowHeight=\(self.tableView.estimatedRowHeight)")
+//        self.tableView.rowHeight = UITableView.automaticDimension
+//        self.tableView.estimatedRowHeight = UIScreen.main.bounds.width * 3 / 4
+//        print("self.tableView.estimatedRowHeight=\(self.tableView.estimatedRowHeight)")
         
         ImageLoader.maxWidth = self.view.frame.width * UIScreen.main.scale
 

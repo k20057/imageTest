@@ -40,7 +40,7 @@ class ImgurTVCell: UITableViewCell {
                 print("要下載的圖片網址: \(url)  self=\(self)")
                 load.loadImage(url: url) { [weak self](image, imageUrl, userData) in
                     guard let self = self else { return }
-                    print("下載完成 圖片網址: imageUrl=\(imageUrl) self.imageUrl=\(self.imageUrl) url=\(url) self=\(self)")
+//                    print("下載完成 圖片網址: imageUrl=\(imageUrl) self.imageUrl=\(self.imageUrl!) url=\(url) self=\(self)")
 
                     //檢查讀到的圖跟目前cell有沒有同一個
                     if imageUrl == self.imageUrl {
@@ -59,7 +59,7 @@ class ImgurTVCell: UITableViewCell {
     }
     
     @IBAction func clickButton(_ sender: Any) {
-        print("clickButton")
+        //下載完圖片才繼續做
         if let image = self.imgImgur.image {
             delegate?.clickTableViewCellDidTap(self, data: image)
         }
