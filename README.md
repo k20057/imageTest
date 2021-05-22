@@ -34,6 +34,6 @@
 讓快取與下載圖片都在privite執行緒執行，並且設定資料庫執行緒會serial執行，如果不設會有死鎖問題。
 #### 6 重構、修改邏輯、checkNextDownload
 增加註釋與讓程式更易讀，還有原本有些邏輯錯了，所以跑了許多不必要的步驟。
-在記憶體快取與資料庫快取執行完之後加checkNextDownload，checkNextDownload是未下載url的function，目的是檢查還有沒有沒下載的url，因為讀到快取就不會跑到正在下載的function。
+在記憶體快取與資料庫快取執行完之後加checkNextDownload，checkNextDownload是未下載url的function，目的是檢查是否還有未下載的url，因為讀到快取就不會跑到正在下載的function。
 ## 結論
 花了一個月的時間，完成這個練習，學了許多技巧，了解cell的重用機制問題，快取，SQlite，物件獨立性，多執行緒，壓縮圖片，md5，程式重構，scrollView，分享。
