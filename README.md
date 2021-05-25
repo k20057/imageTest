@@ -27,7 +27,7 @@
 存到資料庫快取的圖會先經過壓縮再儲存，之後讀取圖片顯示時會快許多，減少滑動UI卡頓的情形。
 
 #### 4 用delegate傳圖到下一頁，scrollview放大圖片，刪除快取與分享圖片。
-使用delegate將圖從cell傳到controller，方法是在cell放一個透明的button，之後再把圖傳到下一級的controller。
+使用delegate將圖從cell傳到下一級的controller，方法是在cell放一個透明的button。
 在controller右上角新增一個刪除button，能夠清空快取資料。
 下一級的controller使用scrollview放大圖片，在右上角新增分享button。
 #### 5 多執行緒與資料庫執行緒
